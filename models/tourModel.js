@@ -106,9 +106,13 @@ tourSchema.pre(/^find/, function (next) {
 });
 tourSchema.post(/^find/, function (docs, next) {
   console.log(Date.now() - this.start);
-  console.log(docs);
   next();
 });
+//AGgregation MIDDLEWARE
+// tourSchema.pre('aggregate', function (next) {
+//   console.log(this);
+//   next();
+// });
 
 const Tour = mongoose.model('Tour', tourSchema); //create model from schema above
 
