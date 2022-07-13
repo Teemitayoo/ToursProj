@@ -152,3 +152,5 @@ tourSchema.pre('aggregate', function (next) {
 const Tour = mongoose.model('Tour', tourSchema); //create model from schema above
 
 module.exports = Tour;
+
+dddhdhdhdhdhdhj;
