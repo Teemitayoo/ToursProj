@@ -105,7 +105,7 @@ exports.updateTour = async (req, res) => {
       req.body,
       {
         new: true,
-        runValidators: true,
+        runValidators: true, ///to run validators in the schema when updating like min length
       }
     );
     res.status(200).json({
