@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const slugify = require('slugify');
-const validator = require('validator');
+const validator = require('validator'); //For external validator like string vsalidator
 
 const tourSchema = new mongoose.Schema(
   {
@@ -152,5 +152,3 @@ tourSchema.pre('aggregate', function (next) {
 const Tour = mongoose.model('Tour', tourSchema); //create model from schema above
 
 module.exports = Tour;
-
-dddhdhdhdhdhdhj;

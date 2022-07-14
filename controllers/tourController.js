@@ -1,5 +1,6 @@
 const Tour = require('./../models/tourModel');
 const APIFeatures = require('./../utils/apiFeatures');
+const catchAsync = require('./../utils/catchAsync');
 
 exports.aliasTopTours = (req, res, next) => {
   req.query.limit = '5';
@@ -9,8 +10,8 @@ exports.aliasTopTours = (req, res, next) => {
   next();
 };
 
-exports.getAllTours = async (req, res) => {
-  try {
+exports.getAllTours = catchAsync(
+  async (req, res, next) => {
     // EXECUTE QUERY
     const features = new APIFeatures(
       Tour.find(),
@@ -30,15 +31,10 @@ exports.getAllTours = async (req, res) => {
         tours, //cause of es6 should be tours:tours
       },
     });
-  } catch (err) {
-    res.status(404).json({
-      status: 'fail',
-      message: err,
-    });
   }
-};
-exports.getTours = async (req, res) => {
-  try {
+);
+exports.getTours = catchAsync(
+  async (req, res, next) => {
     const tour = await Tour.findById(req.params.id); //findbyid works like findone in mongodb shell
     res.status(200).json({
       status: 'success',
@@ -46,22 +42,16 @@ exports.getTours = async (req, res) => {
         tour,
       },
     });
-  } catch (err) {
-    res.status(404).json({
-      status: 'fail',
-      message: err,
-    });
-  }
-
-  // console.log(req.params);
-  // const id = req.params.id * 1; //javascript trick for turning number in string to integer, '4' to 4
-  /*const tour = tours.find((el) => el.id === id);
+    // console.log(req.params);
+    // const id = req.params.id * 1; //javascript trick for turning number in string to integer, '4' to 4
+    /*const tour = tours.find((el) => el.id === id);
 
  */
-};
+  }
+);
 
-exports.createTour = async (req, res) => {
-  try {
+exports.createTour = catchAsync(
+  async (req, res, next) => {
     const newTour = await Tour.create(req.body);
 
     res.status(201).json({
@@ -70,36 +60,18 @@ exports.createTour = async (req, res) => {
         tour: newTour,
       },
     });
-  } catch (err) {
-    res.status(400).json({
-      status: 'fail',
-      messagae: err,
-    });
+    // try {
+    // } catch (err) {
+    //   res.status(400).json({
+    //     status: 'fail',
+    //     messagae: err,
+    //   });
+    // }
   }
+);
 
-  // //console.log(req.body);
-  // const newId = tours[tours.length - 1].id + 1;
-  // const newTour = Object.assign(
-  //   { id: newId },
-  //   req.body
-  // );
-  // tours.push(newTour);
-  // fs.writeFile(
-  //   `${__dirname}/dev-data/data/tours-simple.json`,
-  //   JSON.stringify(tours),
-  //   (err) => {
-  //     res.status(201).json({
-  //       status: 'success',
-  //       data: {
-  //         tour: newTour,
-  //       },
-  //     });
-  //   }
-  //);
-};
-
-exports.updateTour = async (req, res) => {
-  try {
+exports.updateTour = catchAsync(
+  async (req, res, next) => {
     const tour = await Tour.findByIdAndUpdate(
       req.params.id,
       req.body,
@@ -114,33 +86,23 @@ exports.updateTour = async (req, res) => {
         tour,
       },
     });
-  } catch (err) {
-    res.status(400).json({
-      status: 'fail',
-      message: err,
-    });
   }
-};
+);
 
-exports.deleteTour = async (req, res) => {
-  try {
+exports.deleteTour = catchAsync(
+  async (req, res, next) => {
     await Tour.findByIdAndDelete(req.params.id);
 
     res.status(204).json({
       status: 'success',
       data: null,
     });
-  } catch (err) {
-    res.status(400).json({
-      status: 'fail',
-      message: err,
-    });
   }
-};
+);
 //AGGREGATION PIPELINE, FOR STATISTICS
 
-exports.getTourStats = async (req, res) => {
-  try {
+exports.getTourStats = catchAsync(
+  async (req, res, next) => {
     const stats = await Tour.aggregate([
       {
         $match: { ratingsAverage: { $gte: 4.5 } },
@@ -172,16 +134,11 @@ exports.getTourStats = async (req, res) => {
         stats,
       },
     });
-  } catch (err) {
-    res.status(400).json({
-      status: 'fail',
-      message: err,
-    });
   }
-};
-exports.getMonthlyPlan = async (req, res) => {
-  //for months with highest tours
-  try {
+);
+exports.getMonthlyPlan = catchAsync(
+  async (req, res, next) => {
+    //for months with highest tours
     const year = req.params.year * 1;
     const plan = await Tour.aggregate([
       {
@@ -223,10 +180,5 @@ exports.getMonthlyPlan = async (req, res) => {
         plan,
       },
     });
-  } catch (err) {
-    res.status(400).json({
-      status: 'fail',
-      message: err,
-    });
   }
-};
+);
