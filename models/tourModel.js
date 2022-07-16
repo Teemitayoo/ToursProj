@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const slugify = require('slugify');
-const validator = require('validator'); //For external validator like string vsalidator
+//const validator = require('validator'); //For external validator like string vsalidator
 
 const tourSchema = new mongoose.Schema(
   {
