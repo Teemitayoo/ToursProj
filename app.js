@@ -17,6 +17,7 @@ app.use(express.static(`${__dirname}/public`)); //To render static files like ov
 
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString(); //middleware for knowing today's date and putting it in code
+  console.log(req.headers);
   next();
 });
 
