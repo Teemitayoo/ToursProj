@@ -19,5 +19,8 @@
     "morgan": "^1.10.0",
     "slugify": "^1.6.5",
     "validator": "^13.7.0"
+  },
+  "devDependencies": {
+    "babel-plugin-transform-object-rest-spread": "^6.26.0"
   }
 }
