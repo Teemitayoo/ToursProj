@@ -10,7 +10,7 @@ exports.getAllUsers = catchAsync(
       status: 'success',
       results: users.length,
       data: {
-        users, //cause of es6 should be users:users
+        users, //cause of es6 should be users:
       },
     });
   }
