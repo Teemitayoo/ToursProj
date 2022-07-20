@@ -49,7 +49,7 @@ class APIFeatures {
     return this;
   }
   paginate() {
-    const { page = 1, limit = 9 } = this.queryString;
+    const { page = 1, limit = 20 } = this.queryString;
     // const page = parseInt(this.queryString.page) || 1;
     // const limit =
     //   parseInt(this.queryString.limit) || 100;
