@@ -1,3 +1,4 @@
+const crypto = require('crypto');
 const { promisify } = require('util'); //for promisify tokin validation
 const jwt = require('jsonwebtoken');
 const User = require('./../models/userModel');
@@ -18,6 +19,9 @@ exports.signup = async (req, res, next) => {
       password: req.body.password,
       passwordConfirm: req.body.passwordConfirm,
       passwordChangedAt: req.body.passwordChangedAt,
+      passwordResetToken: req.body.passwordResetToken,
+      passwordResetExpires:
+        req.body.passwordResetExpires,
       role: req.body.role,
     });
 
@@ -208,4 +212,41 @@ exports.forgotPassword = catchAsync(
     }
   }
 );
-exports.resetPassword = (req, res, next) => {};
+exports.resetPassword = catchAsync(
+  async (req, res, next) => {
+    //Get User based on the token
+
+    const hashedToken = crypto
+      .createHash('sha256')
+      .update(req.params.token)
+      .digest('hex');
+    console.log(`wagwan supp ${hashedToken}`);
+
+    const user = await User.find({
+      passwordResetToken: hashedToken,
+    });
+    console.log(` wagwan supp ${user}`);
+    //If token has not expired, and there is user, set new password
+    if (!user) {
+      return next(
+        new AppError(
+          'Token is inavlid or has expired',
+          400
+        )
+      );
+    }
+    user.password = req.body.password;
+    user.passwordConfirm = req.body.passwordConfirm;
+    user.passwordResetToken = undefined;
+    user.passwordResetExpires = undefined;
+    await user.save(); //NOT WORKING DAMN
+    //update changedpasswordat property for user
+    //log the user in, send jwt
+    const token = signToken(user._id);
+
+    res.status(200).json({
+      status: 'success',
+      token,
+    });
+  }
+);
